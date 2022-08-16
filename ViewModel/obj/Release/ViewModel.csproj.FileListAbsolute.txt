@@ -1,0 +1,6 @@
+C:\Users\sunday\Desktop\8square\asp.net mvc\WebApplication1\ViewModel\bin\Release\ViewModel.dll
+C:\Users\sunday\Desktop\8square\asp.net mvc\WebApplication1\ViewModel\bin\Release\ViewModel.pdb
+C:\Users\sunday\Desktop\8square\asp.net mvc\WebApplication1\ViewModel\obj\Release\ViewModel.csproj.AssemblyReference.cache
+C:\Users\sunday\Desktop\8square\asp.net mvc\WebApplication1\ViewModel\obj\Release\ViewModel.csproj.CoreCompileInputs.cache
+C:\Users\sunday\Desktop\8square\asp.net mvc\WebApplication1\ViewModel\obj\Release\ViewModel.dll
+C:\Users\sunday\Desktop\8square\asp.net mvc\WebApplication1\ViewModel\obj\Release\ViewModel.pdb

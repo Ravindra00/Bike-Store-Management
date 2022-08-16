@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "jspPDF";
+    Layout = null;
+}
+
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js">
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.0.37/jspdf.plugin.autotable.js"></script>
+</head>
+
+<body>
+    <button onclick="generateExcel('table_with_data')">Export to Excel</button>
+    <button onclick="generatePDF('table_with_data')">Export to PDF</button>
+    <br />
+    <br />
+
+    <table border="1" cellspacing="0" bordercolor="gray" id="table_with_data">
+        <tbody>
+            <tr class="header">
+                <th>Rate ID</th>
+                <th>Origin</th>
+                <th>Origin Via</th>
+                <th>Destination</th>
+                <th>Destination Via</th>
+                <th>Price</th>
+                <th>Commodity</th>
+                <th>Container Type</th>
+                <th>Service</th>
+                <th>Carrier</th>
+                <th>Transit Time</th>
+                <th>Contract ID</th>
+                <th>Amendment #</th>
+                <th>Effective Date</th>
+                <th>Expiration Date</th>
+                <th>Contract Expiration</th>
+            </tr>
+            <tr>
+                <td>01</td>
+                <td>Los Angeles</td>
+                <td></td>
+                <td>Shanghai</td>
+                <td></td>
+                <td>$1,200.00</td>
+                <td>FAK; Cargo N.O.S. Etc.</td>
+                <td>FCL - 40' / DC</td>
+                <td>CY/CY</td>
+                <td>K Line America</td>
+                <td>N/A</td>
+                <td>987654321a</td>
+                <td>16</td>
+                <td>01/02/2017</td>
+                <td>12/31/2017</td>
+                <td>12/31/2017</td>
+            </tr>
+            <tr>
+                <td>02</td>
+                <td>Los Angeles</td>
+                <td></td>
+                <td>Shanghai</td>
+                <td></td>
+                <td>$1,200.00</td>
+                <td>FAK; Cargo N.O.S. Etc.</td>
+                <td>FCL - 40' / DC</td>
+                <td>CY/CY</td>
+                <td>K Line America</td>
+                <td>N/A</td>
+                <td>987654321a</td>
+                <td>16</td>
+                <td>01/02/2017</td>
+                <td>12/31/2017</td>
+                <td>12/31/2017</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+<script>
+    //export table to excel
+    function generateExcel(data) {
+        //getting data from our table
+        var data_type = 'data:application/vnd.ms-excel';
+        var table_div = document.getElementById(data);
+        var table_html = table_div.outerHTML.replace(/ /g, '%20');
+
+        var a = document.createElement('a');
+        a.href = data_type + ', ' + table_html;
+        a.download = 'Example_Table_To_Excel.xls';
+        a.click();
+    }
+
+
+    //export table to pdf
+    function generatePDF(data) {
+        debugger
+        var doc = new jsPDF('l', 'pt');
+
+        var elem = document.getElementById(data);
+        var data = doc.autoTableHtmlToJson(elem);
+        doc.autoTable(data.columns, data.rows, {
+            margin: { left: 35 },
+            theme: 'grid',
+            tableWidth: 'auto',
+            fontSize: 8,
+            overflow: 'linebreak',
+        }
+        );
+
+        doc.save('Example_Table_To_PDF.pdf');
+    }
+</script>

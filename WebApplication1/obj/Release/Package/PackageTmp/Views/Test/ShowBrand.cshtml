@@ -1,0 +1,162 @@
+﻿@*@model  WebApplication1.ViewModel.TestModel*@
+@model  ViewModels.TestModel
+@{
+    ViewData["title"] = "Details";
+}
+
+<style>
+/*    h1 {
+        font-family: cursive;
+    }
+
+    body {
+        background-color: skyblue;
+    }*/
+
+
+    .tableFixHead {
+        margin-top:50px;
+        overflow: auto;
+        height: 500px;
+        width: fit-content;
+    }
+
+    .tableFixHead thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .tableFixHead1 {
+        margin-top:50px;
+        overflow: auto;
+        height: 200px;
+        width: fit-content;
+        top:200px;
+    }
+
+    .tableFixHead1 thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    .tableFixHead2 {
+        margin-top: 10px;
+        overflow: auto;
+        height: 290px;
+        width: fit-content;
+        top: 200px;
+    }
+    tableFixHead2 thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    .page-header {
+        padding-bottom: 9px;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+    }
+</style>
+<div class="row" style=" width: 1400px;">
+    <div class="tableFixHead">
+        <table class="table table-bordered text-nowrap">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">S.NO</th>
+                    <th scope="col">Product id</th>
+                    <th scope="col">product name </th>
+                    <th scope="col">categoryid</th>
+                    <th scope="col">brandid</th>
+                    <th scope="col">modelyear</th>
+                    <th scope="col">listprice</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var (d, i) in Model.Products.Select((value, i) => (value, i)))
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td class="text-dark">@d.ProductId</td>
+                        <td class="text-dark">@d.ProductName</td>
+                        <td class="text-dark">@d.CategoryId</td>
+                        <td class="text-dark">@d.BrandId</td>
+                        <td class="text-dark">@d.ModelYear</td>
+                        <td class="text-dark">@d.ListPrice</td>
+                        <td>@Html.ActionLink("Delete", "Delete", new { d.ProductId }, new { @class = "btn btn-danger" })</td>
+                        <!--<td>-->
+                        @*@Html.ActionLink("Edit", "AddORUpdateStoreDetails", new { d.StoreId, d.StoreName, d.Phone, d.Email, d.Street, d.City, d.Zipcode, d.State }, new { @class = "btn btn-success" })*@
+
+                        @*@Html.ActionLink("", "", new { ID = @d.ProductId }, new { @class = "btn btn-danger" })*@
+
+                        <!--</td>-->
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-3">
+        <div class="row">
+            <div class="tableFixHead1">
+                <table class="table table-bordered text-nowrap">
+                    <thead class="table-dark">
+
+                        <tr>
+                            <th scope="col">S.NO</th>
+                            <th scope="col">C.id</th>
+                            <th scope="col">CatogeriesName</th>
+                            <th></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var (d, i) in Model.catogeries.Select((value, i) => (value, i)))
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td class="text-dark">@d.CategoryId</td>
+                                <td class="text-dark">@d.CategoryName</td>
+                                <td>@Html.ActionLink("Delete", "Delete", new { d.CategoryId }, new { @class = "btn btn-danger" })</td>
+
+
+                                <!--<td>-->
+                                @*@Html.ActionLink("Edit", "AddORUpdateStoreDetails", new { d.StoreId, d.StoreName, d.Phone, d.Email, d.Street, d.City, d.Zipcode, d.State }, new { @class = "btn btn-success" })*@
+
+                                @*@Html.ActionLink("", "", new { ID = @d.ProductId }, new { @class = "btn btn-danger" })*@
+
+                                <!--</td>-->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="tableFixHead2">
+                <table class="table table-bordered text-nowrap">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">S.NO</th>
+                            <th scope="col">B.ID</th>
+                            <th scope="col">Brand Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var (d, i) in Model.Brands.Select((value, i) => (value, i)))
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td class="text-dark">@d.BrandId</td>
+                                <td class="text-dark">@d.BrandName</td>
+                                <td>@Html.ActionLink("Delete", "Delete", new { d.BrandId }, new { @class = "btn btn-danger" })</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,377 @@
+﻿
+@*@model WebApplication1.ViewModel.OrderModel*@
+@model ViewModels.OrderModel
+@{
+    ViewBag.Title = "order";
+}
+<style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .list-group {
+            height: 70vh;
+            margin-bottom: 10px;
+            overflow: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+            .list-group::-webkit-scrollbar {
+                display: none;
+            }
+
+        .list-group-item:hover {
+            color: black;
+            background-color: deeppink;
+            border-right: 2px solid rgb(5, 68, 104);
+            text-decoration: wavy;
+            transition: all 0.2s ease;
+        }
+
+        .list-group a:hover {
+            background-color: pink;
+        }
+
+        a.list-group-item {
+            color: #0a2b1c;
+            font-family: Arial Black;
+            font-size: medium;
+            margin: 0 0 10px 0;
+        }
+
+        small {
+            font-size: 16px;
+            color: #f57224;
+        }
+
+        #ProductName {
+            font-size: 15px;
+        }
+
+            #ProductName option {
+                margin-bottom: 8px;
+            }
+
+                #ProductName option:hover {
+                    background-color: lightskyblue;
+                }
+
+        .container {
+            margin: 0px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        #addRow {
+            /*.btn-success {*/
+            /*margin-top: 10px;*/
+        }
+        strong {
+            color: darkgreen;
+        }
+
+        .tableFixHead {
+            overflow: auto;
+            height: 300px;
+            width: 100%;
+        }
+
+            .tableFixHead thead th {
+                position: sticky;
+                top: 0;
+                z-index: 1;
+            }
+</style>
+
+@{
+    Html.RenderPartial("Personal/_alertSuccess");
+}
+
+    <div class="card border-primary mt-2 mb-3" style="box-shadow:0px 5px 6px 0px black;">
+        <div class="card-body row" style=" padding:15px 8px;">
+            @*<div class="panel panel-default mb-3">
+                <div class="row" style="margin:20px; text-align:match-parent;">*@
+                    <div class="col">
+                        <label>Customer Name</label>
+                        @Html.DropDownList("CustomerId", new SelectList(Model.Customers, "CustomerId", "FirstName"), "Select Customer ▼",
+                                                new { @class = "form-control CustomerName" })
+                    </div>
+                    <div class="col">
+                        <label>Store Name</label>
+                        @Html.DropDownList("StoreId", new SelectList(Model.Store, "StoreId", "StoreName"), "Select Store ▼",
+                                                new { @class = "form-control StoreName", @onchange = "LoadProduct(this ,'ProductName')" })
+                    </div>
+                    <div class="col">
+                        <label>Staff Name</label>
+                        @Html.DropDownList("StaffID", new SelectList(Model.Staff, "StaffID", "FirstName"), "Select Customer ▼",
+                                                new { @class = "form-control StaffName" })
+                    </div>
+                    <div class="col">
+                        <label>Ordered Date</label>
+                        <input type="date" class="form-control" id="Order_date" name="trip-start" value="2022-07-22" min="2020-01-01" max="2024-12-31" required>
+                    </div>
+                    <div class="col">
+                        <label>Required Date</label>
+                        <input type="date" class="form-control" id="Required_date" name="trip-start" value="2022-07-22" min="2020-01-01" max="2024-12-31" required>
+                    </div>
+                    <div class="col">
+                        <label>Shipped Date</label>
+                        @*<input type="datetime" class="form-control" id="Shipped_date" />*@
+                        <input type="date" class="form-control" id="Shipped_date" name="trip-start" value="2022-07-22" min="2020-01-01" max="2024-12-31" required>
+                    </div>
+                    <div class="col">
+                        <label>Order Status</label>
+                        <select id="Status" class="form-control" required>
+                            <option value="1">New</option>
+                            <option value="2">In Progress</option>
+                            <option value="3">Completed</option>
+                            <option value="4">Canceled</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+    <div class="card border-primary mt-0 mb-3" style="box-shadow:0px 5px 6px 0px black;">
+        <div class="card-title">SELECT PRODUCT</div>
+        <div class="card-body" style=" padding:15px 8px;">
+                <form id="std">
+
+                    <div class="row">
+                        <div class="col">
+                            <label>Products</label>
+                            <select id="ProductName" class="form-control" @*multiple size="5"*@ required>
+                            </select>
+                        </div>
+                        <div class="col-2 quantity">
+                            <label>Quantity</label>
+                            <input type="number" id="Quantity" class="form-control" required />
+                        </div>
+                        <div class="col-sm-1" discount">
+                            <label>Discount</label>
+                            <select id="Discount" class="form-control" required>
+                                <option value="2">2 %</option>
+                                <option value="5">5 %</option>
+                                <option value="6">6 %</option>
+                                <option value="7">7 %</option>
+                            </select>
+                        </div>
+                        <div class="col Price">
+                            <label>Total Price</label>
+                            <input type="number" id="Price" class="form-control" placeholder="$2000" value="500" required />
+                        </div>
+
+                        <div class="col mt-4">
+                            <button class="btn btn-success form-control w-auto" id="addRow" @*onclick="save()"*@>Add To List</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    <div class="card border-success mt-0 mb-4" style="box-shadow:0px 5px 6px 0px black;">
+        <div class="card-title bg-secondary">PRODUCTS LIST</div>
+        <div class="card-body" style=" padding:15px 8px;">
+
+                <div class="tableFixHead">
+                    <table id="tblOrdersItem" class="table table-bordered table-striped text-wrap table-responsive table-hover mt-5">
+                        <thead class="bg-white">
+                            @*<table id="example" class="display" style="width:100%">*@
+                            <tr>
+                                <th align="left" class="product">Sn</th>
+                                <th align="left" class="product">Product Name</th>
+                                <th align="left" class="product">Quantity</th>
+                                <th align="left" class="product">Discount</th>
+                                <th align="left" class="product">Price</th>
+                                @*<th align="left" class="product">Order status</th>*@
+                                <th align="left" class="product" style="width: 5px;">
+                                    <button id="table1" class="btn btn-success" style="padding:3px 32px;">save</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+            <script>
+    function LoadProduct(sender, target) {
+        var _target = document.getElementById(target);
+        var _sendId = sender.value;
+        $("#ProductName option").remove();
+        $.ajax({
+        type: "GET",
+        url: '@Url.Action("orderProduct")',
+        data: { id: _sendId },
+        //dataType: "json",
+        //contentType: "application/json; charset=utf-8",
+            success: function (data) {
+            debugger
+                console.log(data);
+                $(_target).append(data);
+            },
+            error: function (ex) {
+                alert(ex);
+                console.log(ex);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        var t = $('#tblOrdersItem').DataTable();
+        var counter = 1;
+
+        //$('#addRow').on('click', function () {
+        $('#std').on('submit', function (e) {
+            e.preventDefault();
+            debugger
+            //event.preventDefault()
+            var ProductId = $("#ProductName").val();
+            var Quantity = $("#Quantity").val();
+            var ListPrice = $("#Price").val();
+            var Discount = $("#Discount").val();
+            //var OrderStatus = $("#Status").val();
+            var Edit = "<button class='btn btn-danger ms-2' onclick='remove(this);' style='padding:3px 3px;' >"
+                        + "<i class='glyphicon glyphicon-trash'></i>"
+                        + "</button>";
+            t.row.add([counter,ProductId, Quantity, ListPrice, Discount,Edit]).draw(false);
+
+            counter++;
+            $("#ProductName").val('');
+            $("#Quantity").val('');
+            $("#Price").val('');
+            $("#Discount").val('');
+            //$("#Status").val('');
+
+        });
+
+        //$('#tblOrdersItem tbody').on('click', 'tr', function () {
+        //    $(this).toggleClass('selected');
+        //});
+        //$('#button').click(function () {
+        //    alert(table.rows('.selected').data().length + ' row(s) selected');
+        //});
+        $('#table1').click(function () {
+            var data = t.rows().data();
+            var leng = t.rows().data().length;
+            var lng = data.length;
+
+            var da = [];
+            debugger
+            for (i = 0; i < data.length; i++)
+            {
+                var da2 = {};
+                da2['ProductId'] = data[i][1];
+                da2['Quantity'] = data[i][2];
+                da2['ListPrice'] = data[i][3];
+                da2['Discount'] = data[i][4];
+                da.push(da2);
+
+            };
+            var da3 = {};
+            da3.CustomerId      = $(".CustomerName").val();
+            da3.StoreId         = $(".StoreName").val();
+            da3.StaffId         = $(".StaffName").val();
+            da3.OrderDate       = $("#Order_date").val();
+            da3.RequiredDate    = $("#Required_date").val();
+            da3.ShippedDate     = $("#Shipped_date").val();
+            da3.OrderStatus     = $("#Status").val();
+            da3.orderItems = da;
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("saveorderitem")',
+                data: JSON.stringify(da3),
+                dataType: "JSON",
+                contentType: "application/json;",
+                success: function (res) {
+                    alert('added');
+                    var t = $('#tblOrdersItem').DataTable();
+                    t.rows().remove().draw();
+                }
+
+            });
+
+        });
+
+
+        //$('#tblOrdersItem tbody').on('click', '.del', function () {
+        //    debugger
+        //    t.row($(this).parents('tr')).remove().draw();
+        //});
+
+    });
+
+    function remove(data)
+    {
+        debugger
+        var t = $('#tblOrdersItem').DataTable();
+        t.row($(data).parents('tr')).remove().draw();
+
+        $("#success-alert").fadeTo(200, 500).slideUp(500, function () {
+            $("#success-alert").slideUp(500);
+        });
+    }//function
+
+    function delOrderItems(data) {
+       if(confirm("Are you sure? ")==true){
+           var id = data;
+           var url = '@Url.Action("DeleteOrderItems")';
+           debugger
+           $.ajax({
+               type: "POST",
+               url: url,
+               data: { id: id },
+               dataType: "JSON",
+               success: function (res) {
+                   debugger
+                   //alert(res.text);
+                   $("#success-alert").fadeTo(200, 500).slideUp(500, function () {
+                       $("#success-alert").slideUp(500);
+                   });
+                   LoadData();
+               },
+               error: function () {
+                   alert("nani");
+               }
+
+           });//ajax
+        }//if
+
+    }//function
+
+    function delOrders(data) {
+        if(confirm("Are you sure? ")==true){
+            var id = data;
+            var url = '@Url.Action("DeleteOrders")';
+            debugger
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { id: id },
+                dataType: "JSON",
+                success: function (res) {
+                    debugger
+                    alert(res.text);
+                    LoadData();
+                },
+                error: function () {
+                    alert("nani");
+                }
+
+            });//ajax
+        }//if
+
+}//function
+            </script>
+
+
+
+

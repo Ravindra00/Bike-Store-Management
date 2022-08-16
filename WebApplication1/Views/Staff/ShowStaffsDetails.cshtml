@@ -1,0 +1,260 @@
+﻿@*@using WebApplication1.ViewModel*@
+@model IEnumerable<ViewModels.StaffModel>
+@{
+    ViewData["Title"] = "Staffs Details";
+}
+@*<link href="~/Content/Loader2.css" rel="stylesheet" />*@
+
+
+<style>
+    h1 {
+        font-family: cursive;
+    }
+
+    .page-header {
+        padding-bottom: 9px;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+    }
+
+    .tableFixHead {
+        overflow: auto;
+        height: 500px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+        .tableFixHead thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+    .modal-dialog {
+        position: static;
+    }
+</style>
+@*HEADER*@
+<div class="page-header m-0">
+    <h1 class="text-uppercase">STAFFS LIST</h1>
+</div>
+
+<div class="container">
+    <div class="tableFixHead">
+        @*<table cellspacing="5" cellpadding="5" class="table table-bordered table-hover">*@
+        <table class="table table-bordered text-nowrap table-responsive">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>
+                        <button class="btn btn-danger" onclick="location.href='@Url.Action("ShowStaffsDetails", "Staff")'">BACK</button>
+                    </th>
+                    <th>S.NO</th>
+                    <th scope="col">Staff ID</th>
+                    <th scope="col">First Name </th>
+                    <th scope="col">Last Name </th>
+                    <th scope="col">Email </th>
+                    <th scope="col">Phone No </th>
+                    <th scope="col">Active </th>
+                    <th scope="col">Store ID </th>
+                    <th scope="col">Manager ID </th>
+                    <th>
+                        @*<button  id ="add" class="btn btn-primary">Add NewStock</button>*@
+                        <button class="btn btn-primary" onclick="AddorEdit('@Url.Action("AddOrEditStaffDetails","Staff",new { id = 0 })','ADD NEW STAFF')">Add New Staff</button>
+                        @*<a class="btn btn-success text-white" onclick="AddorEdit('@Url.Action("AddStaffDetails","Staff",null)','New Item')">New</a>*@
+                        @*<button id="add" class="btn btn-primary" onclick="AddorEdit('@Url.Action("AddorEdit","Item",null)','New Item')">Add NewStock </button>*@
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tblStaff">
+                @foreach (var (d, i) in Model.Select((value, i) => (value, i)))
+                {
+                    <tr>
+                        <td></td>
+                        <td>@i</td>
+                        <td>@d.StaffID</td>
+                        <td>@d.FirstName</td>
+                        <td>@d.LastName</td>
+                        <td>@d.Email</td>
+                        <td>@d.PhoneNo</td>
+                        <td>
+                            @(d.Active==1 ? "ON" : "OFF")
+                        </td>
+                        <td>@d.StoreID</td>
+                        <td>@d.ManagerID</td>
+                        <td>
+                            @*<button class="btn btn-success" onclick="location.href='@Url.Action("Edit", "Stocks")'">Edit</button>*@
+                            <button class="btn btn-success" onclick="AddorEdit('@Url.Action("AddOrEditStaffDetails", "Staff",new {id=d.StaffID})','EDIT STAFF')">Edit</button>
+                            @*<a class="btn btn-success text-white" onclick="AddorEdit('@Url.Action("AddorEdit","Item",new {id=d.StaffID})','New Item')">Update</a>*@
+                            @*<button class="btn btn-danger" id="delete" onclick="location.href='@Url.Action("Delete", "Stocks")'">Delete</button>*@
+                            <button class="btn btn-danger delStaff" data-bind="@d.StaffID">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@*PopUPDIV*@
+<div class="modal fade" id="form_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" onclick="$('#form_modal').modal('hide');" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>*@
+<script>
+                //PROBLEM
+    @*AddorEdit = (url,title) => {
+        $.ajax({
+            type: 'GET',
+            url: url,
+            success: function (response) {
+                debugger
+                $('#form_modal .modal-body').html(response);
+                $('#form_modal .modal-title').html(title);
+                $('#form_modal').modal('show');
+
+                debugger
+                $("#form_modal .modal-body #formstd").submit(function ()
+                {
+                    debugger
+                    var data = {};
+                    data.StaffID   = $("#StaffID").val();
+                    data.FirstName = $('#FirstName').val();
+                    data.LastName  = $('#LastName').val();
+                    data.Email     = $('#Email').val();
+                    data.PhoneNo   = $('#PhoneNo').val();
+                    data.Active    = $('#Active').val();
+                    data.StoreID   = $('#StoreID').val();
+                    data.ManagerID = $('#ManagerID').val();
+                    debugger
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("AddOrEditStaffDetails")',
+                        data: JSON.stringify(data),
+                        data: '{model: ' + JSON.stringify(data) + '}',
+                        dataType :'json',
+                        //contentType: "application/json; charset=utf-8",
+                        success: function (response)
+                        {
+                            debugger
+                        },
+                        error: function ()
+                        {
+                            alert("error");
+                        }
+                    });
+                });
+            },
+            error: function ()
+            {
+                alert("Error");
+            }
+        });
+    }*@
+
+    AddorEdit = (url, title) => {
+        debugger 
+        console.log(url);   
+        $.ajax({
+            type: 'GET',
+            url: url,
+            success: function (response) {
+               // debugger
+                $('#form_modal .modal-body').html(response);
+                $('#form_modal .modal-title').html(title);
+                $('#form_modal').modal('toggle');
+
+               // debugger
+                $("#form_modal .modal-body #formstd").submit(function ()
+                {
+                    console.log("hello");
+                    var data = $("#formstd").serialize();
+                    $.ajax({
+                        type :"POST",
+                        url :'@Url.Action("AddOrEditStaffDetails")',
+                        //data : JSON.stringify(data),
+                        data : data,
+                        dataType :'json',
+                        //contentType: "application/json; charset=utf-8",
+                        success: function (response)
+                        {
+                            debugger
+                        },
+                        error: function ()
+                        {
+                            alert("error");
+                        }
+                    });
+                });
+            },
+            error: function ()
+            {
+                alert("Error");
+            }
+        });
+    }
+
+    @*$("#add").click(function (){
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("AddStaffDetails")',
+            success: function (response) {
+                debugger
+                $('#form_modal .modal-body').html(response);
+                $('#form_modal .modal-title').html("ADD NEW STAFF");
+                $('#form_modal').modal('show');
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
+    });*@
+
+    $("#tblStaff .delStaff").click(function () {
+        debugger
+        if (confirm("Are you sure?") == true)
+        {
+            debugger
+            var id= $(this).data("bind");
+            var url = '@Url.Action("DeleteStaffDetails")';
+            $.ajax({
+                type: "POST",
+                url: url ,
+                data: { id: id },
+                dataType:"json",
+                //contentType: "application/json; charset=utf-8",
+                beforeSend: function () {
+                    $('.loader-wrapper').show();
+                },
+                success: function (res) {
+                    debugger
+                    $(".loader-wrapper").hide();
+                    alert(res.responseText);
+                    window.location.href = "/Staff/ShowStaffsDetails";
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+    });
+</script>
+

@@ -1,0 +1,90 @@
+﻿<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            var pdfdoc = new jsPDF();
+            var specialElementHandlers = {
+                '#nopdf': function (element, renderer) {
+                    return true
+                }
+            };
+            $("#pdf").click(function () {
+                debugger
+                pdfdoc.fromHTML($('#PDFcontent').html(), 10, 10, {
+                    //pdfdoc.fromHTML($('#PDFcontent').html(), 10, 10, {
+                    'width': 110,
+                    'elementHandlers': specialElementHandlers
+                });
+                pdfdoc.save('First.pdf');
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="div">
+        <h3>First PDF</h3>
+        <p>Content to be written in PDF can be placed in this DIV!</p>
+        <div id="nopdf" class="nopdf">
+            <p>Only for display and not in pdf</p>
+        </div>
+        <div id="nopdf">
+            <p>what is this</p>
+        </div>
+        <div id="PDFcontent">
+            <table class="table-responsive table-bordered">
+                <thead>
+                    <tr>
+                        <th>head1</th>
+                        <th>head2</th>
+                        <th>head3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John</td>
+                        <td>Doe</td>
+                        <td>john@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>John</td>
+                        <td>Doe</td>
+                        <td>john@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>John</td>
+                        <td>Doe</td>
+                        <td>john@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>John</td>
+                        <td>Doe</td>
+                        <td>john@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>John</td>
+                        <td>Doe</td>
+                        <td>john@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>John</td>
+                        <td>Doe</td>
+                        <td>john@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>John</td>
+                        <td>Doe</td>
+                        <td>john@example.com</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <button class="btn btn-success" id="pdf" />Generate PDF
+
+</body>
+</html>

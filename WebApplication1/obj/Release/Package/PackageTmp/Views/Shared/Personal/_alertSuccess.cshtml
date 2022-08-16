@@ -1,0 +1,32 @@
+﻿<style>
+    #success-alert {
+        position: absolute;
+        width: 15%;
+        height: 50px;
+        display: none;
+        z-index: 9;
+        left: 85%;
+        background-color: limegreen;
+        text-align: center;
+        border-radius: 20%;
+    }
+</style>
+<div class="alert alert-success" id="success-alert">
+    @*<div class="row">
+        <div class="col">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+        </div>
+        <div class="col">*@
+    <strong>Success!</strong>
+</div>
+
+@*<script>
+        $("#success-alert").fadeTo(500, 500).slideUp(500, function () {
+            $("#success-alert").slideUp(500);
+        });
+    </script>*@
+
+
+@*@{
+    Html.RenderPartial("Personal/_alertSuccess");
+}*@

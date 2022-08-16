@@ -1,0 +1,171 @@
+﻿@{
+    ViewData["title"] = "Orders";
+}
+<style>
+    .page-header {
+        padding-bottom: 5px;
+        margin: 0px;
+    }
+
+    h1 {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+</style>
+
+@{
+    Html.RenderPartial("Personal/_alertSuccess");
+}
+
+
+<div class="card border-primary mt-2 mb-4" style="box-shadow:0px 5px 6px 0px black;">
+    <div class="card-title" style="background-color: #7d911a;">
+        ORDERS DETAILS
+        <button class="btn btn-success" style="font-size:14px;margin-left:78%;" onclick="location.href='@Url.Action("order","Orders")'"><i class="fa-solid fa-cart-plus"></i> Add New Order</button>
+    </div>
+
+    <div class="card-body" style=" padding:15px 8px;">
+        <table class=" cell-border text-nowrap table-striped table-hover" id="ordertbl" style="width:100%;">
+            <thead style="background-color: #0dba83; color: navajowhite; ">
+                <tr>
+                    <th></th>
+                    <th>Customer Name</th>
+                    <th>OrderStatus </th>
+                    <th>Store Name</th>
+                    <th>Staff Name</th>
+                    <th>Order Date</th>
+                    <th>Required Date</th>
+                    <th>Shipped Date</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*PopUPDIV*@
+<div class="modal fade" id="orderItem_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" onclick="$('#orderItem_modal').modal('hide');" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Construction in progress</h4>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+
+        $("#ordertbl").DataTable({
+            ajax: {
+                url: "@Url.Action("GetOrdersDetails", "Orders")",
+                type: "POST",
+                datatype: "json"
+            },
+            columns: [
+                {
+                    "title": "SN",
+                    render: function (data, type, row, meta) { return meta.row + meta.settings._iDisplayStart + 1; }
+                },
+                { data: "CustomerName", name: "CustomerName" },
+                { data: "OrderStatusinstring", name: "OrderStatusinstring" },
+                //{ data: "OrderDate", name: "OrderDate" },
+                { data: "StoreName", name: "StoreName" },
+                { data: "StaffName", name: "StaffName" },
+                { data: "Orderdateinstring", name: "OrderDate" },
+                //{ data: "RequiredDate", name: "RequiredDate" },
+                { data: "Requireddateinstring", name: "RequiredDate" },
+                //{ data: "ShippedDate", name: "ShippedDate" },
+                { data: "Shippeddateinstring", name: "ShippedDate" },
+                //{ data: 'ShippedDate', render: $.fn.dataTable.render.moment('M/D/YYYY') },
+                {
+                    mRender: function (data, type, row) {
+                        return '<button class="btn btn-primary" style=" font-size:13px;padding:2px;" onclick="AddorEdit(\'@Url.Action("ShowOrdersItem", "Orders")\',\'Orders Items \')"> OrdersItem</button>'
+                    }
+                },
+                {
+                    mRender: function (data, type, row) {
+                        return '<a href="#" class="table-delete ms-4" onclick="Delete(' + row.OrderId + ')"><i class="fa-solid fa-trash-can" style="color:red;"></i></a>'
+                    }
+                }
+                //{
+                //    mRender: function (data, type, row) {
+                //        return '<a href="#" class="table-edit" data-id="Id" onclick="Edit(' + row.CustomerId+ ')"><i class="glyphicon glyphicon-pencil"></i></a>  <a href="#" class="table-delete ms-4" onclick="Delete(' + row.CustomerId + ')"><i class="glyphicon glyphicon-trash"></i></a>'
+                //    }
+                //}
+            ],
+            serverSide: true,
+            order: [1, "asc"],
+            processing: true,
+            filter: true,
+            orderMulti: false,
+            ordering: true,
+            pageLength: 11,
+            language: {
+                emptyTable: "No record found.",
+                processing:
+                    '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:pink;"></i><span class="sr-only">Loading...</span> '
+            }
+            });
+        });
+
+    function Delete(id) {
+        if (confirm("are u sure?") == true) {
+            debugger
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("DeleteOrders")',
+                data: { id: id },
+                dataType: 'json',
+                //contentType: "application/json;",
+                success: function (res) {
+                    var t = $('#ordertbl').DataTable();
+                    t.row($(id).parents('tr')).remove().draw();
+
+                    //alert("success");
+
+                    $("#success-alert").fadeTo(500, 500).slideUp(500, function () {
+                        $("#success-alert").slideUp(500);
+                    });
+                },
+                error: function () {
+                    alert("Error");
+                }
+
+            });
+        }
+    }
+    AddorEdit = (url, title) => {
+        debugger
+        console.log(url);
+        $.ajax({
+            type: 'GET',
+            url: url,
+            success: function (response) {
+                // debugger
+                //$('#orderItem_modal .modal-body').html(response);
+                $('#orderItem_modal .modal-title').html(title);
+                $('#orderItem_modal').modal('toggle');
+            }
+        });
+    }
+
+
+</script>

@@ -1,0 +1,40 @@
+﻿@*@model WebApplication1.ViewModel.StocksModel*@
+@model ViewModels.StocksModel
+@{ 
+    ViewData["title"] = "ADD Stocks";
+}
+
+<body>
+    @using (Html.BeginForm("AddStocksDetails", "Stocks", FormMethod.Post, new { @class = "center" }))
+    {
+        @*<div>
+                <h1 class="text-center"> ADD STOCKS</h1>
+            </div>*@
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-lg-1 gy-2">
+                        @Html.HiddenFor(x => x.StoreId, new { @class = "readonly" })
+                        @*<input type="hidden" class="form-control" readonly />*@
+                    </div>
+
+                    <div class="col-lg-3 gy-5">
+                        @Html.DropDownList("ProductId", new SelectList(Model.ProductItems, "ProductId", "ProductName"), " ▼▼ SELECT PRODUCTNAME ▼▼", new { @class = "form-control" })
+
+                    </div>
+
+                    <div class="col-lg-3 gy-5">
+                        @Html.TextBoxFor(x => x.Quantity, new { @type = "number", @class = "form-control", @placeholder = "ENTER QUANTITY" })
+                        @*<input type="text" class="form-control" placeholder="ENTER QUANTITY" />*@
+                    </div>
+                    <div class="col-lg-3 gy-5">
+                        <button type="submit" class="btn btn-success" value="ADD">ADD NEW STOCKS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @*<button class="btn btn-danger" onclick="location.href='@Url.Action("ShowStocksDetails","Stocks", new { id=Model.StoreId})'">BACK</button>*@
+
+</body>

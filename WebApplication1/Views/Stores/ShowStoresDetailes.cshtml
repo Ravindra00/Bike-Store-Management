@@ -1,0 +1,129 @@
+﻿@*@using WebApplication1.ViewModel*@
+@using ViewModels
+@model IEnumerable<StoreModel>
+@{
+    ViewData["title"] = "Stores Details";
+}
+<style>
+    h1 {
+        font-family: cursive;
+    }
+
+    .page-header {
+        border-bottom: 1px solid #eee;
+        text-align: center;
+    }
+</style>
+<div class="card border-primary mt-2 mb-4" style="box-shadow:0px 5px 6px 0px black;">
+    <div class="card-title">STORE DETAILS</div>
+    <div class="card-body" style=" padding:15px 8px;">
+        <table class=" cell-border text-nowrap table-striped table-hover" id="storetbl" style="width:100%;">
+            <thead style="background-color: #0dba83; color: navajowhite;">
+
+                <tr>
+                    <th>S.no</th>
+                    <th>Store Name</th>
+                    <th>Phone No </th>
+                    <th>Email</th>
+                    <th>Street </th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zipcode</th>
+                    @*<th scope="col">CreatedBy</th>*@
+                    @*<th scope="col">CreatedDate</th>*@
+                    @*<th scope="col">ModifiedBy</th>
+                        <th scope="col">ModifiedDate</th>*@
+                    <th scope="col">STOCKS </th>
+                    <th>
+                        <button class="btn btn-primary" onclick="location.href='@Url.Action("AddORUpdateStoreDetails", "Stores")'"
+                                style="font-size:13px; padding:2px;">
+                            Add NewStore
+                        </button>
+                    </th>
+                    @*<th></th>*@
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @*@foreach (var d in Model)*@
+                @foreach (var (d, i) in Model.Select((value, i) => (value, i)))
+                {
+                    <tr>
+                        <td>@i</td>
+                        @*<td>@d.StoreId / <a href="@Url.Action("ShowStoreAndStocksDetails","Stocks",new {id = d.StoreId})">Stocks</a></td>*@
+                        <td class="text-dark">@d.StoreName</td>
+                        <td class="text-dark">@d.Phone</td>
+                        <td class="text-dark">@d.Email</td>
+                        <td class="text-dark">@d.Street</td>
+                        <td class="text-dark">@d.City</td>
+                        <td class="text-dark">@d.State</td>
+                        <td class="text-dark">@d.Zipcode</td>
+                        @*<td class="text-dark">@d.CreatedBy</td>*@
+                        @*<td class="text-dark">@d.CreatedDate</td>*@
+                        @*<td class="text-dark">@d.ModifiedBy</td>
+                            <td class="text-dark">@d.ModifiedDate</td>*@
+                        <td>
+                            <button class="btn btn-info" onclick="location.href='@Url.Action("ShowStocksDetails", "Stocks", new { id = d.StoreId })'"
+                                    style="font-size:13px; padding:2px;">
+                                Stocks
+                            </button>
+                        </td>
+                        <td>
+                            @Html.ActionLink("✏️", "AddORUpdateStoreDetails", new { d.StoreId, d.StoreName, d.Phone, d.Email, d.Street, d.City, d.Zipcode, d.State })
+
+                            @Html.ActionLink("🗑", "DeleteStoresDetails", new { ID = @d.StoreId }, new { @style = " font-size:20px; color:red;" })
+                            @*<a href="@Url.Action("AddORUpdateStoreDetails",new {d.StoreId,d.StoreName,d.Phone,d.Email,d.Street,d.City,d.Zipcode,d.State})">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>&nbsp;&nbsp;
+                                <a href="@Url.Action("DeleteStoresDetails",new { ID=@d.StoreId})">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#storetbl").DataTable({
+            pageLength: 10,
+            dom: 'l<"butcenter"B>frtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    className: 'copy',
+                    text: '<i class="far fa-copy"></i>'
+                },
+                {
+                    extend: 'excel',
+                    className: 'excel',
+                    text: '<i class="far fa-file-excel"></i>'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'pdf',
+                    text: '<i class="far fa-file-pdf"></i>'
+                },
+                {
+                    extend: 'csv',
+                    className: 'csv',
+                    text: '<i class= "fa-solid fa-file-csv" ></i>'
+
+                },
+                {
+                    extend: 'print',
+                    className: 'print',
+                    text: '<i class="fa fa-print"></i>'
+                }
+            ]
+        });
+    });
+</script>
+
+
+

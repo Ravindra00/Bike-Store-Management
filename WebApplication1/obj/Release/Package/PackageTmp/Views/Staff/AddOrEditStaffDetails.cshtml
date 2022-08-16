@@ -1,0 +1,91 @@
+﻿@*@model WebApplication1.ViewModel.StaffModel*@
+@model ViewModels.StaffModel
+@{
+    Layout = null;
+}
+
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    body {
+        /*background-color: skyblue;*/
+        /*font-family: cursive;*/
+    }
+</style>
+
+@*@using (Html.BeginForm())*@
+
+<form id="formstd">
+    <div class="row">
+        @Html.HiddenFor(x => x.StaffID, new {@class= "StaffID" })
+        <div class="form-group col-md-6">
+            <label>FIRST NAME</label>
+            @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control FirstName", @placeholder = "Enter First Name" })
+            @Html.ValidationMessageFor(x => x.FirstName, "", new { @class = "error" })
+        </div>
+        <div class="form-group col-md-6">
+            <label>LAST NAME</label>
+            @Html.TextBoxFor(x => x.LastName, new { @class = "form-control LastName", @placeholder = "Enter Last Name" })
+            @Html.ValidationMessageFor(x => x.LastName, "", new { @class = "error" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <label>EMAIL</label>
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control Email", @placeholder = "eg. abcd@gmail.com" })
+        @Html.ValidationMessageFor(x => x.Email, "", new { @class = "error" })
+    </div>
+    <br />
+    <div class="form-group">
+        <label>PHONE NO.</label>
+        @*<input class="form-control PhoneNo" id="PhoneNo" name="PhoneNo" type="number" onKeyPress="if(this.value.length==10) return false;" placeholder="Enter Phone No"/>*@
+        @Html.TextBoxFor(x => x.PhoneNo, new { @type = "number", @maxlength = "6", @minlength = "4", @class = "form-control PhoneNo", @placeholder = "Enter Phone No" })
+        @Html.ValidationMessageFor(x => x.PhoneNo, "", new { @class = "error" })
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label>STORE NAME</label>
+            @Html.DropDownList("StoreID", new SelectList(Model.store, "StoreId", "StoreName"), "SELECT STORE ▼▼", new
+            {
+                @class = "form-control StoreID"@*,@size ="5"*@})
+
+            @*@Html.TextBoxFor(x => x.StoreID, new { @class = "form-control StoreID", @placeholder = "Enter Store Id" })*@
+            @Html.ValidationMessageFor(x => x.StoreID, "", new { @class = "error" })
+        </div>
+        <div class="form-group col-md-6">
+            <label>MANAGER NAME</label>
+            @Html.DropDownList("ManagerID", new SelectList(Model.staffs, "StaffID", "FirstName"), "SELECT MANAGER ▼▼", new { @class = "form-control ManagerID" })
+
+            @*@Html.TextBoxFor(x => x.ManagerID, new { @class = "form-control ManagerID", @placeholder = "Manager Id" })*@
+            @Html.ValidationMessageFor(x => x.ManagerID, "", new { @class = "error" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <label>ACTIVE : </label>
+        @Html.RadioButtonFor(x => x.Active, 1, new { @Checked = "Checked" })
+        <label>ON</label>
+        @Html.RadioButtonFor(x => x.Active, 0)
+        <label>OFF</label>
+        @Html.ValidationMessageFor(x => x.Active, "", new { @class = "error" })
+    </div>
+    <br />
+    <div>
+        @if (Model.StaffID == 0)
+        {
+            <button type="submit" class="btn btn-success px-6" style="float: right;">ADD NEW STAFF</button>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-success px-6" style="float: right;">UPDATESTAFF</button>
+
+        }
+        <button type="button" class="btn btn-secondary px-3" onclick="$('#form_modal').modal('hide');">BACK</button>
+    </div>
+    @*<a class="btn btn-success text-white" onclick="addoredit('@url.action("addoredit","item",new {id=item.id})','new item')">update</a>*@
+
+</form>

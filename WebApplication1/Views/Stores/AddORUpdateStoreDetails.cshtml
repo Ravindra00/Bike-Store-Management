@@ -1,0 +1,164 @@
+﻿@*@Html.ValidationSummary(false)*@
+@*@model WebApplication1.ViewModel.StoreModel*@
+@model ViewModels.StoreModel
+
+@{
+    ViewBag.Title = "Student";
+    //Layout = null;
+}
+<head>
+    @*<script>
+        $(document).ready(function () { $(".top_navbar").hide() });
+    </script>*@
+    <style>
+        body {
+            /*background-color: black;*/
+        }
+
+        h1 {
+            font-family: cursive;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .container1 {
+            background-color: white;
+            width: 500px;
+            height:600px;
+            border: 4px solid;
+            border-color: white;
+            border-radius: 10px;
+            margin: 2% 0px 0px 35%;
+            padding: 25px 70px;
+            box-shadow: 0 10px 20px 0 lightgreen;
+        }
+
+            .container1 span {
+                color: black;
+                border-radius: 100px;
+            }
+
+            .container1 label {
+                color: black;
+            }
+
+            .container1 input {
+                border-radius: 100px;
+                border-width: 4px;
+                border-block-start: 0px;
+                border-color: black;
+                /*background-color: white;*/
+            }
+
+            .container1 .input-group input {
+                /*border-radius: 100px;*/
+                border-width: 4px;
+                border-block-start: 0px;
+                border-color: black;
+                border-left-style: none;
+                border-bottom-right-radius: 100px;
+            }
+            .input-group .input-group-text{
+                background-color:black;
+            }
+        .input-group .input-group-text i{
+                color:white;
+        }
+            .input-group{
+                margin-bottom:10px;
+            }
+
+    </style>
+</head>
+@using (Html.BeginForm("AddORUpdateStoreDetails", "Stores", FormMethod.Post))
+{
+
+<div class="container1">
+
+    <div class="form-group">
+        @Html.HiddenFor(x => x.StoreId)
+        <label>STORE NAME:</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+            @Html.TextBoxFor(x => x.StoreName, new { @class = "form-control", @placeholder = "Enter Store Name" })
+        </div>
+        @Html.ValidationMessageFor(x => x.StoreName, "", new { @class = "error" })
+    </div>
+
+    <div class="form-group">
+        <label>PHONE NO:</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+            @Html.TextBoxFor(x => x.Phone, new { @type = "number", @class = "form-control", @placeholder = "Enter phone no" })
+        </div>
+        @Html.ValidationMessageFor(x => x.Phone, "", new { @class = "error" })
+
+    </div>
+
+    <div class="form-group">
+        <label>EMAIL:</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+            @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "Enter Email" })
+        </div>
+        @Html.ValidationMessageFor(x => x.Email, "", new { @class = "error" })
+
+    </div>
+
+    <div class="form-group">
+        <label>STREET:</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-road"></i></span>
+            @Html.TextBoxFor(x => x.Street, new { @class = "form-control", @placeholder = "Enter City" })
+            </div>
+            @Html.ValidationMessageFor(x => x.Street, "", new { @class = "error" })
+        </div>
+
+        <div class="form-group">
+            <label>CITY:</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-city"></i></span>
+
+                @Html.TextBoxFor(x => x.City, new { @class = "form-control", @placeholder = "Enter City" })
+            </div>
+            @Html.ValidationMessageFor(x => x.City, "", new { @class = "error" })
+        </div>
+
+        <div class="form-group">
+            <label>STATE:</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-s"></i></span>
+                
+                @Html.TextBoxFor(x => x.State, new { @class = "form-control", @placeholder = "Enter State" })
+                </div>
+                @Html.ValidationMessageFor(x => x.State, "", new { @class = "error" })
+            </div>
+
+        <div class="form-group">
+            <label>ZIPCODE:</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-z"></i></span>
+                
+                @Html.TextBoxFor(x => x.Zipcode, new { @class = "form-control", @placeholder = "Enter zip Code" })
+                </div>
+                @Html.ValidationMessageFor(x => x.Zipcode, "", new { @class = "error" })
+            </div>
+
+            <div>
+                @if (Model.StoreId != 0)
+                {
+                    <button type="submit" class="btn btn-success" style="float:right">UPDATE STORE</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-success" style="float:right">ADD STORE</button>
+                }
+                <a class="btn btn-danger" style="float:left" onclick="location.href='@Url.Action("ShowStoresDetailes","Stores")'">BACK</a>
+            </div>
+        </div>
+    @*@Html.ValidationSummary(true, "Please fix the following error and then submit the form")*@
+
+}
+

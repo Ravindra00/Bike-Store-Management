@@ -1,0 +1,168 @@
+﻿@model Model.Model.UserRegisterViewModel
+
+@{
+    ViewBag.Title = "RoleManagement";
+}
+
+@{
+    Html.RenderPartial("Personal/_alertSuccess");
+}
+
+<form id="Userform">
+    <div class="card border-primary mt-2 mb-3" style="box-shadow:0px 5px 6px 0px black;width:100%;">
+        <div class="card-title">ROLE MANAGEMENT</div>
+        <div class="card-body" style=" padding:15px 8px;">
+            <div class="row">
+                <div class="col-3" style="margin:10px;padding-left: 0px;padding-right: 0px;">
+                    <div class="row">
+                        <div class="col-2 text-end">
+                            <label class="col-form-label">Role: </label>
+                        </div>
+                        <div class="col">
+                            <select id="role" class="form-control"></select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col m-2 " style="font-size:20px; color:red;">
+                    <p>Please select Roles before selecting menus</p>
+                </div>
+
+                @*<div class="col-3 panel panel-info" style="margin: 10px; padding-left: 0px; padding-right: 0px;">
+        <div class="panel-heading">Menu</div>
+        <div class="panel-body" style="overflow: auto; height:560px;">
+            @{
+                Html.RenderAction("GetMenuList", "User");
+
+            }
+        </div>*@
+            </div>
+        </div>
+
+       </div>
+        <div class="card border-info" style="box-shadow:0px 5px 6px 0px black;">
+            <div class="card-title" style="background-color: lightgreen">SELECT MENU</div>
+            <div class="card-body" style=" padding:15px 8px;">
+                @*<div class="panel panel-info" style="margin: 10px; padding-left: 0px; padding-right: 0px;">
+                <div class="panel-body" style="overflow: auto; height:auto;">*@
+                @{
+                    Html.RenderAction("GetMenuList", "User");
+
+                }
+            </div>
+
+            @*<button type="submit" class="btn btn-primary form-control" style="margin-top:22px;float:right;margin-right:20%;">Create</button>*@
+        </div>
+
+
+</form>
+
+
+<script>
+
+    $(document).ready(function () {
+        var data = $("#role").val();
+        if (data == null) {
+            var d = document.getElementsByName("menuItem");
+            for (var i = 0; i < d.length; i++) {
+                d[i].disabled = true;
+            }
+            var selectall = document.getElementById('causelist_month').disabled=true;
+        }
+
+        //for dropdown
+        $.ajax({
+        type: "POST",
+        url: '@Url.Action("GetRoles")',
+        //data: { id: _sendId },
+        //dataType: "json",
+        contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                $.each(data, function (i, item) {
+                    var rows = "<option value='"+item.RoleId+"'>"+ item.RoleName+"</option>";
+                    $('#role').append(rows);
+                });
+                $('#role').val('');
+
+            },
+            error: function (ex) {
+                alert("Error");
+                console.log(ex);
+            }
+        });//ajax
+    });//doc ready
+
+    //for checkbutton change
+    $("#role").change(function () {
+
+        //to enable field from disable
+            var d = document.getElementsByName("menuItem");
+            for (var i = 0; i < d.length; i++) {
+                d[i].disabled = false;
+            }
+            var selectall = document.getElementById('causelist_month').disabled = false;
+
+
+        var dID = $("#role").val();
+        var d =document.getElementsByName("menuItem");
+        for (var i = 0; i < d.length; i++) {
+            d[i].checked = false;
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CheckRoleMenu", "User")',
+            data: { id: dID },
+            dataType: "json",
+            //contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        debugger
+                        document.getElementById(data[i].MenuId).checked = true;
+                        //document.getElementById(data[i].MenuId).attr("checked", true);
+                        //document.getElementById(data[i].MenuId).prop("checked", true);
+                    }
+                },
+                error: function (ex) {
+                    alert("Checkbox eroor");
+                    console.log(ex);
+                }
+            });//ajax
+    });
+
+    //to save role with menu id
+    function Save(frm) {
+        var arr2 = [];
+        for (var i in frm.menuItem) {
+            if (frm.menuItem[i].checked) {
+                arr2.push(frm.menuItem[i].value);
+            }
+        }
+        var arr = {};
+        arr.MenuId = arr2;
+        arr.RoleId = $("#role").val();
+        debugger
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveRoleMenu","User")',
+            data: JSON.stringify(arr),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#success-alert").fadeTo(500, 500).slideUp(500, function () {
+                    $("#success-alert").slideUp(500);
+                });
+                $("#role").val('');
+                var d = document.getElementsByName("menuItem");
+                for (var i = 0; i < d.length; i++) {
+                    d[i].checked = false;
+                }
+
+            },
+            error: function (ex) {
+                alert("Error");
+                console.log(ex);
+            }
+        });//ajax
+    }
+</script>

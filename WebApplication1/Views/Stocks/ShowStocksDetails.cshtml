@@ -1,0 +1,90 @@
+﻿@*@using WebApplication1.ViewModel*@
+@using ViewModels
+@model StoreModel
+@{
+    ViewData["Title"] = "Stocks Details";
+}
+<style>
+/*    h1 {
+        font-family: cursive;
+    }*/
+    body {
+        background-color: #f4f6f9;
+    }
+    .page-header {
+        padding-bottom: 9px;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+    }
+    .tableFixHead {
+        overflow: auto;
+        height: 500px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+        .tableFixHead thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+</style>
+
+<div class="page-header">
+    <h1 class="text-uppercase">Stocks DETAILS of @Model.StoreName</h1>
+</div>
+@if (Model.StockList == null)
+{
+<div>
+    <button class="btn btn-danger" onclick="location.href='@Url.Action("ShowStoresDetailes", "Stores")'">BACK</button>
+    <button class="btn btn-primary" onclick="location.href='@Url.Action("AddStocksDetails", "Stocks", new { Model.StoreId })'">Add NewStock</button>
+
+</div>
+}
+else
+{
+<div class="container">
+    <div class="tableFixHead">
+        <table class="table table-bordered text-nowrap table-responsive">
+            <thead class="table-dark">
+
+                <tr>
+                    <th>
+                        <button class="btn btn-danger" onclick="location.href='@Url.Action("ShowStoresDetailes", "Stores")'">BACK</button>
+                    </th>
+                    <th>S.NO</th>
+                    <th scope="col">PRODUCT NAME</th>
+                    <th scope="col">QUANTITY </th>
+                    <th>
+                        <button class="btn btn-primary" onclick="location.href='@Url.Action("AddStocksDetails", "Stocks", new { Model.StoreId })'">Add NewStock</button>
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var (d, i) in Model.StockList.Select((value, i) => (value, i)))
+                {
+                    <tr>
+                        <td></td>
+                        <td>@i</td>
+                        <td>@d.ProductName</td>
+                        <td>@d.Quantity</td>
+                        <td>
+                            <button class="btn btn-success" onclick="location.href='@Url.Action("Edit", "Stocks", new { d.StoreId, d.ProductId, d.Quantity })'">Edit</button>
+                            <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Stocks", new { d.StoreId, d.ProductId, d.Quantity })'">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+    </div>
+}
+
+
+
+
+
+

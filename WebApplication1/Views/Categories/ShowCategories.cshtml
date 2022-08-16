@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.Title = "Show Categories";
+}
+<style>
+    .span {
+        font-size: 15px;
+        color: red;
+        margin-left: 5px;
+    }
+</style>
+ 
+
+
+@{
+    Html.RenderPartial("Personal/_alertSuccess");
+}
+
+<div style="margin-left:25%;">
+    <div class="card border-primary mt-2 mb-2" style="box-shadow: 0px 5px 6px 0px black; width: 65%;">
+        <div class="card-title">CATEGORIES</div>
+        <div class="card-body" style=" padding:15px 8px;">
+            @*<div class="panel panel-primary mt-4" style="width:65%;">
+                <div class="panel-heading text-center">Categories</div>
+                <div class="panel-body">*@
+            <form id="categoryform">
+                <div class="row">
+                    <div class="col">
+                        <label>Categories Name:<span class="span">*</span> </label>
+                        <input type="text" id="categoriesname" class="form-control" placeholder="Enter Category Name" required />
+                    </div>
+                    <div class="col" style="padding-top:26px;">
+                        <button type="submit" class="btn btn-success form-control" /> Add New Category
+                    </div>
+                </div>
+            </form>
+            <div class="row mt-3 mb-1">
+                <div class="col">
+                    <button class="btn btn-primary" onclick="generateExcel('Categorytd')">Excel</button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" onclick="generatePDF('Categorytd')">PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card border-primary mt-0 mb-4" style="box-shadow:0px 5px 6px 0px black; width:65%;" id="print">
+        <div class="card-body" style=" padding:15px 8px;">
+            @*<div class="panel panel-primary" style="width:65%;" id="print">
+                <div class="panel-body">*@
+                    <table class="table table-bordered text-nowrap table-responsive" id="Categorytd" style="width:100%;">
+                        <thead @*style="background-color: #343a40; color:white;"*@>
+                            <tr>
+                                <th></th>
+                                <th>Category Id</th>
+                                <th>Category Name</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <script src="~/Scripts/Personal/JsPDF.js"></script>
+        <script>
+    $(document).ready(function () {
+        var i = 1;
+        loadtable();
+    });
+
+
+
+    function loadtable() {
+        $("#Categorytd").DataTable({
+            ajax: {
+                url: '@Url.Action("GetCategoryDetails","Categories")',
+                type: "POST",
+                datatype: "json"
+            },
+            columns: [
+                {
+                    "title": "SN",
+                    render: function (data, type, row, meta) { return meta.row + meta.settings._iDisplayStart + 1; }
+                },
+                { data: "CategoryId", name: "CategoryId", visible: false },
+                { data: "CategoryName", name: "CategoryName" },
+                {
+                    mRender: function (data, type, row) {
+                        //return '<a href="#" class="table-edit" data-id="Id" onclick="Edit(' + row.CustomerId + ')"><i class="glyphicon glyphicon-pencil"></i></a>  <a href="#" class="table-delete ms-4" onclick="Delete(' + row.CustomerId + ')"><i class="glyphicon glyphicon-trash"></i></a>'
+                        return '<a href="#" class="table-delete ms-4" onclick="Delete(' + row.CategoryId + ')"><i class="glyphicon glyphicon-trash"></i></a>'
+                    }
+                }
+            ],
+            serverSide: true,
+            order: [2, "asc"],
+            processing: true,
+            filter: true,
+            orderMulti: false,
+            ordering: true,
+            language: {
+                emptyTable: "No record found.",
+                processing:
+                    '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:pink;"></i><span class="sr-only">Loading...</span> '
+            },
+            dom: 'l<"butcenter"B>frtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    className: 'copy',
+                    text: '<i class="far fa-copy"></i>'
+                },
+                {
+                    extend: 'excel',
+                    className: 'excel',
+                    text: '<i class="far fa-file-excel"></i>'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'pdf',
+                    text: '<i class="far fa-file-pdf"></i>'
+                },
+                {
+                    extend: 'csv',
+                    className: 'csv',
+                    text: '<i class= "fa-solid fa-file-csv" ></i>'
+
+                },
+                {
+                    extend: 'print',
+                    className: 'print',
+                    text: '<i class="fa fa-print"></i>'
+                }
+            ]
+        });
+    }
+
+    function Delete(id) {
+        if (confirm("are u sure?") == true) {
+            $.ajax({
+                type: 'POSt',
+                url: "@Url.Action("DeleteCategory")",
+                data: { id: id },
+                dataType: 'json',
+                success: function (response) {
+                    var t = $('#Categorytd').DataTable();
+                    t.row($(id).parents('tr')).remove().draw();
+
+                    //alert("success");
+
+                    $("#success-alert").fadeTo(200, 500).slideUp(500, function () {
+                        $("#success-alert").slideUp(500);
+                    });
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+    }
+
+    $("#categoryform").submit(function (e) {
+        if (confirm('Are u sure?') == true) {
+            e.preventDefault();
+            //var data = $("#customertd").serialize();
+            var data = {};
+            data.CategoryName = $("#categoriesname").val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CreateCategory")',
+                data: JSON.stringify(data),
+                //data : data,
+                dataType: 'json',
+                contentType: "application/json;",
+                success: function (response) {
+                    $("#success-alert").fadeTo(200, 500).slideUp(500, function () {
+                        $("#success-alert").slideUp(500);
+                    });
+                    $("#categoriesname").val('');
+
+                    var t = $("#Categorytd").DataTable();
+                    t.ajax.reload();
+
+                },
+                error: function () {
+                    alert("error");
+                }
+            });//ajax
+        }
+        });//start
+
+        </script>

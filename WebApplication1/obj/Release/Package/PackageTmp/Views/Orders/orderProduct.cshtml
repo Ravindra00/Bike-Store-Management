@@ -1,0 +1,7 @@
+﻿@*@model IEnumerable<WebApplication1.ViewModel.ProductModel>*@
+@model IEnumerable<ViewModels.ProductModel>
+@foreach (var p in Model)
+{
+    <option  id ="@p.ProductId" value="@(p.ProductId)">@(p.ProductName)</option>
+}
+

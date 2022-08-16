@@ -1,0 +1,18 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    var username = User.Identity.GetUserName().Split('@');
+}
+@if (Request.IsAuthenticated)
+{
+    <div class="Logout row">
+        <a href="#" class="col-auto"><i class="fa fa-user"></i> Hello @username[0] ! </a>
+        @*@Html.ActionLink("Log Out", "LogOff", "Account", "", new { @class = "nav-link" })*@
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "col-auto" }))
+        {
+            @Html.AntiForgeryToken()
+            <a href="javascript:document.getElementById('logoutForm').submit()">
+                <span><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</span>
+            </a>
+        }
+    </div>
+}

@@ -1,0 +1,153 @@
+﻿
+
+@*@using WebApplication1.ViewModel*@
+@using ViewModels
+@model List<MenuModel>
+
+<style>
+    /* The container */
+    .selectcontainer3, .container3, .menucontainer3 {
+        display: block;
+        position: relative;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 15px;
+        -webkit-user-select: none;
+/*        -moz-user-select: none;
+        -ms-user-select: none;*/
+        user-select: none;
+        width: fit-content;
+    }
+
+    .selectcontainer3 {
+        padding-left: 25px;
+    }
+
+    .container3 {
+        padding-left: 50px;
+    }
+
+    .menucontainer3 {
+        padding-left: 75px;
+    }
+        /* Hide the browser's default checkbox */
+        .selectcontainer3 input, .menucontainer3 input, .container3 input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+    /* Create a custom checkbox */
+        .selectcontainer3 .checkmark, .container3 .checkmark, .menucontainer3 .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 15px;
+            width: 15px;
+            background-color: #eee;
+            border-radius: 50%;
+            box-shadow: 0 3px 6px 0 black;
+        }
+    .selectcontainer3 .checkmark {
+        left: 0;
+    }
+
+    .container3 .checkmark {
+        left: 25px;
+        border-radius: 0%;
+    }
+
+    .menucontainer3 .checkmark {
+        left: 50px;
+
+    }
+
+    /* On mouse-over, add a grey background color */
+    .menucontainer3:hover input ~ .checkmark, .menucontainer3:hover input ~ .checkmark, .container3:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .selectcontainer3 input:checked ~ .checkmark, .menucontainer3 input:checked ~ .checkmark, .container3 input:checked ~ .checkmark {
+        background-color: skyblue;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .selectcontainer3 input:checked ~ .checkmark:after, .menucontainer3 input:checked ~ .checkmark:after, .container3 input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+/*    .menucontainer3 .checkmark:after, .container3 .checkmark:after {
+        left: 6px;
+        top: -12px;
+        width: 12px;
+        height: 24px;
+        border: solid Purple;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }*/
+</style>
+
+<form id="menuform">
+
+    <label class="selectcontainer3">
+        select all/unselect all
+        <input type="checkbox" name="causelist_month" id="causelist_month" onclick="checkedAll ();">
+        <span class="checkmark"></span>
+    </label>
+    <div class="row">
+        @foreach (var d in Model)
+        {
+            <div class="col-auto mb-3" style=" grid-template-columns: max-content max-content 1fr;">
+                <label class="container3">
+                    @d.MenuItem
+                    <input type="checkbox" name="menuItem" id="@d.Id" value="@d.Id" onClick="">
+                    <span class="checkmark"></span>
+                </label>
+                @foreach (var c in d.Child)
+                {
+                    <label class="menucontainer3">
+                        @c.ChildMenuItem
+                        <input type="checkbox" name="menuItem" id="@c.id" value="@c.id" @*onClick="active(@d.Id)"*@>
+                        <span class="checkmark"></span>
+                    </label>
+                }
+            </div>
+        }
+    </div>
+    <button type="button" class="btn btn-success float-end"  value="Show values" onClick="Save(this.form)" /> Save Roles
+
+</form>
+
+
+<script>
+    var checked = false;
+
+    function checkedAll() {
+        var c = document.getElementsByName("menuItem");
+        //var d = document.getElementsByName("childMenuItem");
+        checked = document.getElementById('causelist_month').checked;
+        for (var i = 0; i < c.length; i++) {
+            c[i].checked = checked;
+        }
+        //for (var i = 0; i < d.length; i++) {
+        //    d[i].checked = checked;
+        //}
+    }
+
+
+</script>
+
+

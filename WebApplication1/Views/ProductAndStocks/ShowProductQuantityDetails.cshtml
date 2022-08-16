@@ -1,0 +1,61 @@
+﻿@*@using WebApplication1.ViewModel*@
+@model IEnumerable<ViewModels.ProductsModel>
+@{
+    ViewData["title"] = "test";
+    //Layout = null;
+}
+@*tag helper*@
+@*<button class="btn btn-primary text-right" align="right" asp-action="Bike" asp-controller="AddStoresDetailes" right>Add New Store</button>*@
+@*using razor syntax*@
+@*@using (Html.BeginForm("AddStoresDetailes", "Bike", FormMethod.Get))
+    {
+        <button> Add New Store </button>
+    }*@
+<div class="col-md-12 bg-light text-right">
+    <input class="btn btn-primary" value="Add product and stocks" onclick="location.href='@Url.Action("AddProductQuantityDetails", "ProductAndStocks")'" />
+</div>
+<div>
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Store Id</th>
+            <th>Product Id</th>
+            <th>Product Name</th>
+            <th>Brand Id</th>
+            <th>Category Id </th>
+            <th>Model Year</th>
+            <th>List Price</th>
+            <th>Quantity</th>
+        </tr>
+        @foreach (var d in Model)
+        {
+            <tr>
+                <td>@d.StoreId</td>
+                <td>@d.ProductId</td>
+                <td>@d.ProductName</td>
+                <td>@d.BrandId</td>
+                <td>@d.CategoryId</td>
+                <td>@d.ModelYear</td>
+                <td>@d.ListPrice</td>
+                <td>@d.Quantity</td>
+
+
+                <td>
+                    @*<a href="@Url.act("Edit",new {d.StoreId,d.StoreName,d.Phone,d.Email,d.Street,d.City,d.State,d.Zipcode })">*@
+                    @*<a href="@Url.Action("EditStoresDetails",new { ID=@d.StoreId})">*@
+                    @*@Html.ActionLink("Edit", "Edit", new { d.StoreId, d.StoreName, d.Email,d.Phone, d.Street, d.City, d.State, d.ZipCode })*@
+                    <a href="@Url.Action("AddORUpdateStoreDetails")">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </a>
+                </td>
+                <td>
+                    @*data-form-method="post"*@
+                    <a href="@Url.Action("Delete",new {d.StoreId,d.ProductId,d.Quantity})">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+

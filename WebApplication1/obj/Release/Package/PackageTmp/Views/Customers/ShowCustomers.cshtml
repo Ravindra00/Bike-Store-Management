@@ -1,0 +1,252 @@
+﻿
+@{
+    ViewBag.Title = "ShowCustomers";
+}
+@*<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">*@
+<style>
+    .spanstar {
+        font-size: 15px;
+        color: red;
+        margin-left: 5px;
+    }
+</style>
+
+
+
+@{
+    Html.RenderPartial("Personal/_alertSuccess");
+}
+
+<div class="card border-primary mt-2 mb-4" style="box-shadow:0px 5px 6px 0px black;">
+    <div class="card-title">CUSTOMER REGISTRATION</div>
+    <div class="card-body" style=" padding:15px 8px;">
+        <form id="customertd">
+            <div class="row">
+                <div class="col">
+                    <label>First Name:<span class="spanstar">*</span> </label>
+                    <input type="text" id="firstname" class="form-control" placeholder="Enter first Name" required />
+                </div>
+                <div class="col">
+                    <label>Last Name:<span class="spanstar">*</span></label>
+                    <input type="text" id="lastname" class="form-control" placeholder="Enter last Name" required />
+                </div>
+                <div class="col">
+                    <label>Phone No:<span style=" font-size: 9px; color: red; margin-left: 5px;">(*10 digits)</span></label>
+                    <input type="number" id="phoneno" class="form-control" placeholder="e.g:9849651512" @*maxlength="9"*@
+                           oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxLength="10" required />
+                </div>
+                <div class="col">
+                    <label>Email Address:<span class="spanstar">*</span></label>
+                    <input type="email" id="email" class="form-control" placeholder="e.g :name@gmail.com" required />
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col">
+                    <label>State:<span class="spanstar">*</span></label>
+                    <input type="text" id="state" class="form-control" placeholder="e.g :Bagmati Pradesh(pov 3)" required />
+                </div>
+                <div class="col">
+                    <label>City:<span class="spanstar">*</span></label>
+                    <input type="text" id="city" class="form-control" placeholder="e.g :kathmandu" required />
+                </div>
+                <div class="col">
+                    <label>Street:</label>
+                    <input type="text" id="street" class="form-control" placeholder="e.g :greenland" />
+                </div>
+                <div class="col">
+                    <label>Zip Code:<span class="spanstar">*</span></label>
+                    <input type="number" id="zipcode" class="form-control" placeholder="e.g :45865"
+                           oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxLength="5" required />
+                </div>
+                <div class="col-1" style="padding-top:26px;">
+                    <button type="submit" class="btn btn-success form-control" /> Add
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="card border-primary mt-0 mb-4" style="box-shadow:0px 5px 6px 0px black;">
+    <div class="card-body" style=" padding:15px 8px;">
+        <table class=" cell-border text-nowrap table-striped table-hover" id="CustomerStd" style="width:100%;">
+            <thead style="background-color: #0dba83; color: navajowhite; ">
+                <tr>
+                    <th></th>
+                    <th>Customer Id</th>
+                    <th>Full Name </th>
+                    @*<th>Last Name </th>*@
+                    <th>Phone No</th>
+                    <th>Email Address</th>
+                    <th>Street</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>ZipC</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<link href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css" rel="stylesheet" />
+
+<script ssrc="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        var i = 1;
+        loadtable();
+
+    });
+
+    function loadtable() {
+        $("#CustomerStd").DataTable({
+            ajax: {
+                url: '@Url.Action("GetCustomersDetails")',
+                type: "POST",
+                datatype: "json"
+            },
+            columns: [
+                {
+                    "title": "SN",
+                    render: function (data, type, row, meta)
+                    { return meta.row + meta.settings._iDisplayStart + 1; }
+                },
+                { data: "CustomerId", name: "CustomerId" ,visible :false },
+                { data: "FirstName", name: "FirstName" },
+                //{ data: "LastName", name: "LastName" },
+                { data: "Phone", name: "Phone" },
+                { data: "EmailAddress", name: "EmailAddress" },
+                { data: "Street", name: "Street" },
+                { data: "City", name: "City" },
+                { data: "State", name: "State" },
+                { data: "ZipCode", name: "ZipCode" },
+                {
+                    mRender: function (data, type, row) {
+                        //return '<a href="#" class="table-edit" data-id="Id" onclick="Edit(' + row.CustomerId + ')"><i class="glyphicon glyphicon-pencil"></i></a>  <a href="#" class="table-delete ms-4" onclick="Delete(' + row.CustomerId + ')"><i class="glyphicon glyphicon-trash"></i></a>'
+                        return '<a href="#" class="table-delete ms-4" onclick="Delete(' + row.CustomerId + ')"><i class="fa-solid fa-trash-can" style="color:red;"></i></a>'
+                    }
+                }
+            ],
+            serverSide: true,
+            order: [2, "asc"],
+            processing: true,
+            filter: true,
+            orderMulti: false,
+            ordering: true,
+            responsive: true,
+
+            language: {
+                emptyTable: "No record found.",
+                processing:
+                    '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:pink;"></i><span class="sr-only">Loading...</span> '
+            },
+            dom: 'l<"butcenter"B>frtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    className: 'copy',
+                    text: '<i class="far fa-copy" data-toggle="tooltip" title="Copy"></i>'
+                },
+                {
+                    extend: 'excel',
+                    className: 'excel',
+                    text: '<i class="far fa-file-excel"data-toggle="tooltip" title="Excel"></i>'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'pdf',
+                    text: '<i class="far fa-file-pdf" data-toggle="tooltip" title="PDF"></i>'
+                },
+                {
+                    extend: 'csv',
+                    className: 'csv',
+                    text: '<i class= "fa-solid fa-file-csv" data-toggle="tooltip" title="CSV" ></i>'
+
+                },
+                {
+                    extend: 'print',
+                    className: 'print',
+                    text: '<i class="fa fa-print" data-toggle="tooltip" title="Print"></i>'
+                }
+            ]
+        });
+    }
+
+    function Delete(id) {
+        console.log(id);
+        if (confirm("are u sure?") == true) {
+            $.ajax({
+                type: 'POSt',
+                url: "@Url.Action("DeleteCustomers")",
+                data: { id: id },
+                dataType: 'json',
+                success: function (response) {
+                    var t = $('#CustomerStd').DataTable();
+                    t.row($(id).parents('tr')).remove().draw();
+
+                    //alert("success");
+
+                    $("#success-alert").fadeTo(500, 500).slideUp(500, function () {
+                        $("#success-alert").slideUp(500);
+                    });
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+    }
+
+    $("#customertd").submit(function (e) {
+        if (confirm('Are u sure?') == true) {
+            e.preventDefault();
+            //var data = $("#customertd").serialize();
+            var data = {};
+            data.FirstName = $("#firstname").val();
+            data.LastName = $("#lastname").val();
+            data.Phone = $("#phoneno").val();
+            data.EmailAddress = $("#email").val();
+            data.Street = $("#state").val();
+            data.City = $("#city").val();
+            data.State = $("#street").val();
+            data.ZipCode = $("#zipcode").val();
+            console.log(data);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CreateCustomers" , "Customers")',
+                data: JSON.stringify(data),
+                //data : data,
+                dataType: 'json',
+                contentType: "application/json;",
+                success: function (response) {
+
+                    $("#success-alert").fadeTo(500, 500).slideUp(500, function () {
+                        $("#success-alert").slideUp(500);
+                    });
+
+                    $("#firstname").val('');
+                    $("#lastname").val('');
+                    $("#phoneno").val('');
+                    $("#email").val('');
+                    $("#state").val('');
+                    $("#city").val('');
+                    $("#street").val('');
+                    $("#zipcode").val('');
+
+                    var t = $("#CustomerStd").DataTable();
+                    t.ajax.reload();
+                },
+                error: function () {
+                    alert("error");
+                }
+            });//ajax
+        }
+        });//start
+
+</script>
+

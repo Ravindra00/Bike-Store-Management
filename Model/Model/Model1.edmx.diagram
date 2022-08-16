@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ca550a1a75534fe5b75e2d75b382bef1" Name="Diagram1" ZoomLevel="48">
+        <EntityTypeShape EntityType="BikeStoresModel.Brand" Width="1.5" PointX="1.5" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoresModel.Category" Width="1.5" PointX="1.5" PointY="19.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoresModel.Customer" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoresModel.OrderItem" Width="1.5" PointX="7.5" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoresModel.Order" Width="1.5" PointX="5.25" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoresModel.Product" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoresModel.Staff" Width="1.5" PointX="3" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoresModel.Stock" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoresModel.Store" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
+        <AssociationConnector Association="BikeStoresModel.FK__Products__brand___29572725" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoresModel.FK__Products__catego__286302EC" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoresModel.FK__Orders__customer__34C8D9D1" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoresModel.FK__OrderItem__order__3A81B327" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoresModel.FK__OrderItem__produ__3B75D760" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoresModel.FK__Orders__staff_id__36B12243" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoresModel.FK__Orders__store_id__35BCFE0A" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoresModel.FK__Stocks__product___3F466844" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoresModel.FK__Staffs__manager___31EC6D26" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoresModel.FK__Staffs__store_id__30F848ED" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoresModel.FK__Stocks__store_id__3E52440B" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="BikeStoresModel.C__MigrationHistory" Width="1.5" PointX="7.375" PointY="6.75" />
+        <EntityTypeShape EntityType="BikeStoresModel.AspNetRole" Width="1.5" PointX="5.375" PointY="2.5" />
+        <EntityTypeShape EntityType="BikeStoresModel.AspNetUserClaim" Width="1.5" PointX="9.875" PointY="3.625" />
+        <EntityTypeShape EntityType="BikeStoresModel.AspNetUserLogin" Width="1.5" PointX="9.875" PointY="1" />
+        <EntityTypeShape EntityType="BikeStoresModel.AspNetUser" Width="1.5" PointX="7.625" PointY="1.375" />
+        <AssociationConnector Association="BikeStoresModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="BikeStoresModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="BikeStoresModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="BikeStoresModel.Menu" Width="1.5" PointX="20.5" PointY="1" />
+        <EntityTypeShape EntityType="BikeStoresModel.Role" Width="1.5" PointX="15" PointY="6.375" />
+        <EntityTypeShape EntityType="BikeStoresModel.RoleMenu" Width="1.5" PointX="19" PointY="6.125" />
+        <EntityTypeShape EntityType="BikeStoresModel.UserRole" Width="1.5" PointX="13.25" PointY="2.5" />
+        <AssociationConnector Association="BikeStoresModel.FK_UserRole_AspNetUsers" />
+        <AssociationConnector Association="BikeStoresModel.FK_Menu_Menu" />
+        <AssociationConnector Association="BikeStoresModel.FK_RoleMenu_Menu" />
+        <AssociationConnector Association="BikeStoresModel.FK_RoleMenu_Role" />
+        <AssociationConnector Association="BikeStoresModel.FK_UserRole_Role" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

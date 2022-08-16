@@ -1,0 +1,253 @@
+﻿@*@model WebApplication1.Models.UserRegisterViewModel*@
+@model Model.Model.UserRegisterViewModel
+@{
+    ViewBag.Title = "CreateRegistration";
+}
+<style>
+    .spanstar {
+        font-size: 15px;
+        color: red;
+        margin-left: 5px;
+    }
+</style>
+@{
+    Html.RenderPartial("Personal/_alertSuccess");
+}
+<div class="card border-primary mt-2 mb-4" style="box-shadow:0px 5px 6px 0px black;">
+    <div class="card-title">USER REGISTRATION</div>
+    <div class="card-body" style=" padding:15px 8px;">
+        <form id="Userform">
+            <div class="row" @*style="margin:20px;*@ ">
+                <div class="col">
+                    <label>Email Address:<span class="spanstar">*</span></label>
+                    <input type="email" name="Email" id="Email" class="form-control" autocomplete="on" placeholder="e.g: ravi@gmail.com" required />
+                </div>
+                <div class="col">
+                    <label>Phone No:<span style=" font-size: 9px; color: red; margin-left: 5px;">(*10 digits)</span></label>
+                    <input type="number" id="PhoneNo" name="PhoneNo" class="form-control" placeholder="e.g:9849651512" @*maxlength="9"*@
+                           oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxLength="10" required />
+                </div>
+                <div class="col">
+                    <label>Password:<span class="spanstar">*</span></label>
+                    <input type="password" name="Password" id="Password" class="form-control" placeholder="Password Please!" required />
+                </div>
+            </div>
+            <div class="row mt-4" @*style="margin:20px;"*@>
+                <div class="col role">
+                    <label>Role:<span class="spanstar">*</span></label>
+                    <select id="role" class="form-control" required>
+                    </select>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-success" style="margin-top:22px;float:right;margin-right:20%;">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@*</div>*@
+
+<div class="card border-primary mt-0 mb-4" style="box-shadow:0px 5px 6px 0px black;">
+    <div class="card-body" style=" padding:15px 8px;">
+        <table class=" cell-border text-nowrap table-striped table-hover" id="usertbl" style="width:100%;">
+            <thead style="background-color: #0dba83; color: navajowhite;">
+                <tr>
+                    <th></th>
+                    <th>User Id</th>
+                    <th>User Name</th>
+                    <th>Email Address</th>
+                    @*<th>Password</th>*@
+                    <th>Phone Number</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+
+        //toremove previous option
+        $("#Role option").remove();
+
+        //for dropdown
+        $.ajax({
+        type: "POST",
+        url: '@Url.Action("GetRoles")',
+        //data: { id: _sendId },
+        //dataType: "json",
+        contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                $.each(data, function (i, item) {
+                    var rows = "<option value='"+item.RoleId+"'>"+ item.RoleName+"</option>";
+                    $('#role').append(rows);
+                });
+            },
+            error: function (ex) {
+                alert("Error");
+                console.log(ex);
+            }
+        });
+
+        //for datatable
+        var i = 1;
+        $("#usertbl").DataTable({
+            ajax: {
+                url: '@Url.Action("GetUsersDetails", "User")',
+                type: "POST",
+                datatype: "json"
+            },
+            columns: [
+                {
+                    "title": "SN",
+                    render: function (data, type, row, meta) { return meta.row + meta.settings._iDisplayStart + 1; }
+                },
+                { data: "UserId", name: "UserId", visible: false },
+                { data: "UserName", name: "UserName" },
+                { data: "EmailAddress", name: "EmailAddress" },
+                //{ data: "Password", name: "Password" },
+                { data: "PhoneNumber", name: "PhoneNumber" },
+                { data: "RoleName", name: "RoleName" },
+                {
+                   mRender: function (data, type, row) {
+                        console.log(data);
+                        //return '<a href="#" class="table-edit" data-id="Id" onclick="Edit(' + row.CustomerId + ')"><i class="glyphicon glyphicon-pencil"></i></a>  <a href="#" class="table-delete ms-4" onclick="Delete(' + row.CustomerId + ')"><i class="glyphicon glyphicon-trash"></i></a>'
+                        //return '<a href="#" class="table-delete ms-4" onclick="Delete(' + row.UserId +')"><i class="glyphicon glyphicon-trash" style="color:red;"></i></a>'
+                        return '<a href="#" class="table-delete ms-4" id="userdelete"><i class="fa-solid fa-trash-can" style="color:red;"></i></a>'
+                    }
+                }
+                //{
+                //    "data":function (row, type, set) {
+                //        //return row.UserId + " - " + row.UserName
+                //         //return '<a href="#" class="table-delete ms-4" onclick="Delete('+row.UserId + " - " + row.UserName+')"><i class="glyphicon glyphicon-trash"></i></a>'
+
+                //    }
+                //}
+            ],
+            serverSide: true,
+            order: [2, "asc"],
+            processing: true,
+            filter: true,
+            orderMulti: false,
+            ordering: true,
+            pageLength: 7,
+            language: {
+                emptyTable: "No record found.",
+                processing:
+                    '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:pink;"></i><span class="sr-only">Loading...</span> '
+            },
+            dom: 'l<"butcenter"B>frtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    className: 'copy',
+                    text: '<i class="far fa-copy"></i>'
+                },
+                {
+                    extend: 'excel',
+                    className: 'excel',
+                    text: '<i class="far fa-file-excel"></i>'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'pdf',
+                    text: '<i class="far fa-file-pdf"></i>'
+                },
+                {
+                    extend: 'csv',
+                    className: 'csv',
+                    text: '<i class= "fa-solid fa-file-csv" ></i>'
+
+                },
+                {
+                    extend: 'print',
+                    className: 'print',
+                    text: '<i class="fa fa-print"></i>'
+                }
+            ]
+        });
+
+    });
+
+    //for user form submit
+    $("#Userform").submit(function (e) {
+        e.preventDefault();
+        var data = {};
+        data.Email = $("#Email").val();
+        data.Phone = $("#PhoneNo").val();
+        data.Password = $("#Password").val();
+        data.ConfirmPassword = $("#Password").val();
+        data.RoleId = $("#role").val();
+        debugger
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AdminRegister", "Account")',
+            data:JSON.stringify(data),
+            //data: ,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                //alert(data.text);
+                $('#Userform')[0].reset();
+                $("#success-alert").fadeTo(500, 500).slideUp(500, function () {
+                    $("#success-alert").slideUp(500);
+                });
+                //alert(data);
+            },
+            error: function (ex) {
+                alert("error");
+            }
+
+        });//ajax
+    });
+
+
+    //delete the customers
+    function Delete(id) {
+        /* debugger*/
+        console.log(id);
+        if (confirm("are u sure?") == true) {
+            $.ajax({
+                type: 'POSt',
+                url: "@Url.Action("DeleteUser")",
+                data: { id: id },
+                dataType: 'json',
+                success: function (response) {
+                    var t = $('#usertbl').DataTable();
+                    t.row($(id).parents('tr')).remove().draw();
+
+                    //alert("success");
+
+                    $("#success-alert").fadeTo(500, 500).slideUp(500, function () {
+                        $("#success-alert").slideUp(500);
+                    });
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+    }
+
+    //$("#userdelete").click(function () {
+    //    var data = this.UserId
+    //});
+
+
+</script>
+
+
+
+
+
+
+
+

@@ -1,0 +1,67 @@
+﻿@*@model IEnumerable<WebApplication1.ViewModel.MenuModel>*@
+@model IEnumerable<ViewModels.MenuModel>
+
+<style>
+    .right{
+        position: absolute;
+        right: 1rem;
+        top: 0.7rem;
+    }
+    #childmenu{
+        transition:all 2s ease;
+    }
+
+        </style>
+<ul>
+    @foreach (var (d, i) in Model.Select((value, i) => (value, i)))
+    {
+        @*<li id="@i" onmouseover="dropdown(this.id)" onmouseout="dropshow(this.id)">
+        *@
+    <li id="@i" onclick="dropdownn(this.id)">
+        <a href="@d.ActionName">
+            <span class="icon"><i class="@d.Icon"></i></span>
+            <span class="item">@d.MenuItem</span>
+            @if (d.Child.Count != 0)
+            {
+                <i id="arrow" class="right fas fa-angle-left"></i>
+            }
+        </a>
+        @*<span class="iconright"><i class="right fas fa-angle-down"></i></span>*@
+    </li>
+        if (d.Child.Count != 0)
+        {
+
+            <li class="@i" id="childmenu" style="display: none;">
+
+                @foreach (var c in d.Child)
+                {
+                <a href="@c.ActionName">
+                    @*<span class="icon me-3" style="font-size:70%; width:10px;"><i class="far fa-circle nav-icon"></i></span>*@
+                    <span class="icon me-3" style="font-size:70%; width:10px;"><i class="@c.Icon"></i></span>
+                    
+                    <span class="item ms-0" style="font-size:80%;">@c.ChildMenuItem</span>
+                </a>
+                }
+            </li>
+
+        }
+    }
+</ul>
+
+<script>
+
+    // Function to toggle the bar
+    function dropdownn(id) {
+        var x = document.getElementsByClassName(id);
+        if (x[0].style.display == "block") {
+            x[0].style.display = "none";
+            $('#' + id +' '+'#arrow').removeClass('right fas fa-angle-down').addClass('right fas fa-angle-left');
+        }
+        else {
+            x[0].style.display = "block";
+            $('#' + id + ' ' +'#arrow').removeClass('right fas fa-angle-left').addClass('right fas fa-angle-down');
+            //var y = document.getElementsByClassName("fa-angle-left");
+            //y[0].classList.toggle("fas", "fa-angle-down");
+        }
+    }
+</script>

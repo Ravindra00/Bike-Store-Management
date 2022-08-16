@@ -1,0 +1,204 @@
+﻿@{
+    ViewData["title"] = "Product Details";
+}
+<style>
+    .span {
+        font-size: 15px;
+        color: red;
+        margin-left: 5px;
+    }
+</style>
+
+
+@{
+    Html.RenderPartial("Personal/_alertSuccess");
+}
+
+<div class="card border-primary mt-2 mb-4" style="box-shadow:0px 5px 6px 0px black;">
+    <div class="card-title">PRODUCTS</div>
+    <div class="card-body" style=" padding:15px 8px;">
+        <form id="productform">
+            <div class="row">
+                <div class="col">
+                    <label>Product Name:<span class="span">*</span> </label>
+                    <input type="text" id="productname" class="form-control" placeholder="Enter Product Name" required />
+                </div>
+                <div class="col">
+                    <label>Model Year:<span class="span">*</span></label>
+                    <input type="number" class="form-control" placeholder="eg. 2016" min="1900" max="2099" maxlength="4" required />
+                    @*<input type="date" class="form-control" id="Shipped_date" name="trip-start" value="2022-07-22" min="2020-01-01" max="2024-12-31" required>*@
+
+                </div>
+                <div class="col">
+                    <label>List Price:<span class="span">*</span></label>
+                    <input type="number" id="listprice" class="form-control" required />
+                </div>
+
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-4">
+                    <label>Category Name:<span class="span">*</span></label>
+                    <select id="categoryname" class="form-control" required>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label>Brand Name:<span class="span">*</span></label>
+                    <select id="brandname" class="form-control" required>
+                    </select>
+                </div>
+                <div class="col-2" style="padding-top:26px;">
+                    <button type="submit" class="btn btn-success form-control" /> Add
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card border-primary mt-0 mb-4" style="box-shadow:0px 5px 6px 0px black;">
+    <div class="card-body" style=" padding:15px 8px;">s
+        <table class="table table-bordered text-nowrap table-responsive" id="employeetable" style="width:100%;">
+            <thead style="background-color: #343a40; color:white;">
+                <tr>
+                    <th>Product Id</th>
+                    <th>product Name </th>
+                    <th>category Id</th>
+                    <th>brand Id</th>
+                    <th>Model Year</th>
+                    <th>List Price</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#employeetable").DataTable({
+
+                "ajax": {
+                    "url": "@Url.Action("GetList", "Product")",
+                    "type": "POST",
+                    "datatype":"json"
+                },
+                "columns": [
+                    { "data": "ProductId", "name": "ProductId" },
+                    { "data": "ProductName", "name": "ProductName" },
+                    { "data": "CategoryId", "name": "CategoryId" },
+                    { "data": "BrandId", "name": "BrandId" },
+                    { "data": "ModelYear", "name": "ModelYear" },
+                    { "data": "ListPrice", "name": "ListPrice" },
+                ],
+                "serverSide": "true",
+                "order": [0, "asc"],
+                "processing": "true",
+
+                "filter": "true",
+                "orderMulti": "false",
+                "ordering": "true",
+                //"language": {
+                //    "processing": "processing... please wait"
+                //}
+                "language": {
+                    "emptyTable": "No record found.",
+                    "processing":
+                        '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
+            },
+            dom: 'l<"butcenter"B>frtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    className: 'copy',
+                    text: '<i class="far fa-copy"></i>'
+                },
+                {
+                    extend: 'excel',
+                    className: 'excel',
+                    text: '<i class="far fa-file-excel"></i>'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'pdf',
+                    text: '<i class="far fa-file-pdf"></i>'
+                },
+                {
+                    extend: 'csv',
+                    className: 'csv',
+                    text: '<i class= "fa-solid fa-file-csv" ></i>'
+
+                },
+                {
+                    extend: 'print',
+                    className: 'print',
+                    text: '<i class="fa fa-print"></i>'
+                }
+            ]
+        });
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetcategoryAndBrand")',
+            success: function (data) {
+                //console.log(data);
+                $.each(data.cat, function (i, item) {
+                    var rows = "<option value='" + item.CategoryId + "'>" + item.CategoryName + "</option>";
+                    $('#productform #categoryname').append(rows);
+                });//foreach
+                $.each(data.brn, function (i, item) {
+                    var row = "<option value='" + item.BrandId + "'>" + item.BrandName + "</option>";
+                    $('#productform #brandname').append(row);
+                });//foreach
+                },
+            error: function (ex) {
+                alert("error");
+                //var r = jQuery.parseJSON(response.responseText);
+                //alert("Message: " + r.Message);
+                //alert("StackTrace: " + r.StackTrace);
+                //alert("ExceptionType: " + r.ExceptionType);
+            }
+        });//ajax\
+    });
+
+    $("#productform").submit(function (e) {
+        e.preventDefault();
+        //var data = $("#productform").serialize();
+        var data = {};
+        data.ProductName = $("#productname").val();
+        data.ModelYear = $("#modelyear").val();
+        data.ListPrice = $("#listprice").val();
+        data.BrandId = $("#brandname").val();
+        data.CategoryId =  $("#categoryname").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveProduct")',
+            data : JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#success-alert").fadeTo(200, 500).slideUp(500, function () {
+                    $("#success-alert").slideUp(500);
+                });
+
+                $('#productform')[0].reset();
+
+                var t = $("#employeetable").DataTable();
+                t.ajax.reload();
+            },
+            error: function (ex) {
+                alert(ex);
+                console.log(ex);
+            }
+
+        });//ajax
+        debugger
+    });
+
+
+
+
+
+</script>

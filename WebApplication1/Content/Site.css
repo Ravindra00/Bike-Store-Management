@@ -1,0 +1,388 @@
+﻿body {
+    /*padding:0 0 20px 0;*/
+    height: 92vh;
+    width: calc(100%-20px);
+}
+
+/*set padding to keep content from hitting the edges*/
+.body-content {
+    width: calc(100% - 225px);
+    height: 100%;
+    margin: 0 0 0 225px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top:5px;
+    transition: all 0.5s ease;
+
+}
+body.active .body-content {
+    width: calc(100% - 50px);
+    margin: 0 0 0 50px;
+    transition: all 0.5s ease;
+}
+/*
+ override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column */
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/*set width on the form input elements since they're 100% wide by default*/
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+* {
+    list-style: none;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    background: #f5f5f5;
+    font-size: 14px;
+    /*background: #f4f6f9;*/
+}
+
+.wrapper .sidebar {
+    background: #02291a;
+    /*background: #343a40;*/
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 225px;
+    height: 100%;
+    padding: 20px 0;
+    transition: all 0.5s ease;
+    z-index: 2;
+}
+
+    .wrapper .sidebar .profile {
+        margin-bottom: 30px;
+        text-align: center;
+        transition: all 10s ease;
+    }
+
+        .wrapper .sidebar .profile img {
+            display: block;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+
+        .wrapper .sidebar .profile h2 {
+            display: none;
+        }
+
+        .wrapper .sidebar .profile h3 {
+            color: #ffffff;
+            margin: 10px 0 5px;
+        }
+
+        .wrapper .sidebar .profile p {
+            color: rgb(206, 240, 253);
+            font-size: 14px;
+        }
+
+    .wrapper .sidebar ul {
+        height: 70%;
+        width: 100%;
+        overflow: hidden;
+        overflow-y: scroll;
+        padding-left: 0px;
+    }
+        .wrapper .sidebar ul a {
+            text-decoration:none;
+        }
+
+
+
+        .wrapper .sidebar ul::-webkit-scrollbar {
+            display: none;
+        }
+            .wrapper .sidebar ul li a {
+                display: block;
+                padding: 13px 30px;
+                /*border-bottom: 2px solid red;*/
+                /*border-top: 2px solid red;*/
+                color: #f4f6f9;
+                font-size: 16px;
+                position: relative;
+                margin: 3px 6px;
+                border-radius: 30%;
+            }
+
+        .wrapper .sidebar ul #childmenu a {
+            display: block;
+            padding: 5px 60px;
+            padding: 5px 0px 5px 40px;
+            /*border-bottom: 2px solid Pink;*/
+            /*border-bottom: none;*/
+            color: #f4f6f9;
+            font-size: 16px;
+            position: relative;
+            margin: 3px 6px;
+            /*border-radius: 30%;*/
+            /*border-radius: 30%;#170329*/
+            /*background-color:red;*/
+        }
+            .wrapper .sidebar ul #childmenu a:hover {
+                /*background-color: #ab0af0;*/
+                color: antiquewhite;
+                border-bottom: 2px solid purple;
+                transition: all 0.2s ease-in-out;
+            }
+           .wrapper .sidebar ul li a .icon {
+                color: #dee4ec;
+                width: 30px;
+                display: inline-block;
+        }
+
+        .wrapper .sidebar ul li a:hover,
+        .wrapper .sidebar ul li a.active {
+            color: antiquewhite;
+            /*background: #428bca;*/
+            /*border-right: 2px solid rgb(5, 68, 104);*/
+            border-bottom: 2px solid purple;
+            text-decoration: none;
+            transition: all 1s ease;
+        }
+
+            .wrapper .sidebar ul li a:hover .icon,
+            .wrapper .sidebar ul li a.active .icon {
+                color: white;
+            }
+
+
+/*            .wrapper .sidebar ul li a:hover:before,
+            .wrapper .sidebar ul li a.active:before {
+                display: block;
+            }*/
+
+.wrapper .section {
+    width: calc(100% - 225px);
+    margin-left: 225px;
+    transition: all 0.5s ease;
+    margin-right:0;
+}
+
+    .wrapper .section .top_navbar {
+        background-color: #047047;
+        /*background-color: #c4bbab;*/
+        /*background: #9e6aba;*/
+        height: 50px;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        border-bottom: 3px solid #343a40;
+    }
+
+        .wrapper .section .top_navbar .hamburger a {
+            font-size: 28px;
+            color: ghostwhite;
+            /*color: black;*/
+            text-decoration: none;
+        }
+
+            .wrapper .section .top_navbar .hamburger a:hover {
+                color: #00ff47;
+                bottom: 0;
+                text-decoration: none;
+            }
+
+        .wrapper .section .top_navbar .Logout {
+            padding: 0 30px;
+            margin-left: auto;
+            margin-right: 0;
+
+        }
+
+            .wrapper .section .top_navbar .Logout a {
+                font-size: 16px;
+                color: ghostwhite;
+                margin: 0 5px;
+                text-decoration: none;
+            }
+
+                .wrapper .section .top_navbar .Logout a:hover :hover {
+                    color: #00ff47;
+                    text-decoration: none;
+                }
+/*body.active .wrapper .sidebar {
+    left: -225px;
+}
+
+body.active .wrapper .section {
+    margin-left: 0;
+    width: 100%;
+
+}*/
+/*body.active .wrapper .section {
+    width: 100%;
+    margin-left: 45px;
+    transition: all 0.5s ease;
+}
+*/
+body.active .wrapper .section {
+    width: calc(100% - 50px);
+    margin-left: 50px;
+    transition: all 0.5s ease;
+}
+
+body.active .wrapper .sidebar {
+    left: -175px;
+    transition: all 0.5s ease;
+    z-index: 2;
+}
+
+    body.active .wrapper .sidebar .profile img {
+        display: block;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        /*margin: 0 auto;*/
+        margin-left: 175px;
+    }
+
+    body.active .wrapper .sidebar .profile h2 {
+        color: #ffffff;
+        display: block;
+        text-align: end;
+    }
+
+    body.active .wrapper .sidebar .profile h3, body.active .wrapper .sidebar .profile p{
+        display: none;
+    }
+
+
+    body.active .wrapper .sidebar a {
+        left: 153px;
+        transition: all 0.5s ease;
+    }
+
+    body.active .wrapper .sidebar ul li a .item {
+        display: none;
+    }
+    body.active .wrapper .sidebar:hover{
+        left: 0px;
+        height: 100%;
+        z-index:2;
+    }
+    body.active .wrapper .sidebar:hover a {
+        left: 0px;
+        transition: all 0.5s ease;
+    }
+
+    body.active .wrapper .sidebar:hover ul li a .item {
+        display: inline;
+    }
+
+
+    body.active .wrapper .sidebar:hover .profile img {
+        display: block;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin: 0 auto;
+    }
+
+    body.active .wrapper .sidebar:hover .profile h2 {
+        display: none;
+    }
+
+    body.active .wrapper .sidebar:hover .profile h3, body.active .wrapper .sidebar:hover .profile p {
+        display: block;
+    }
+
+
+    /*dattable css*/
+.butcenter .dt-buttons {
+    background-color: white;
+    margin-left: 2%;
+}
+
+    .butcenter .dt-buttons .copy,
+    .butcenter .dt-buttons .excel,
+    .butcenter .dt-buttons .csv,
+    .butcenter .dt-buttons .pdf,
+    .butcenter .dt-buttons .print {
+        border: none;
+        color: purple;
+        background: linear-gradient(to bottom, rgb(255 255 255) 0%, rgb(255 255 255) 100%);
+        padding: 0px;
+        margin: 0px 10px 0px 0px;
+    }
+
+        .butcenter .dt-buttons .copy:hover,
+        .butcenter .dt-buttons .excel:hover,
+        .butcenter .dt-buttons .csv:hover,
+        .butcenter .dt-buttons .pdf:hover,
+        .butcenter .dt-buttons .print:hover {
+            border: none;
+            color: purple;
+            background: linear-gradient(to bottom, rgb(255 255 255) 0%, rgb(255 255 255) 100%);
+            padding: 0px;
+            margin: 0px 10px 0px 0px;
+        }
+
+            .butcenter .dt-buttons .copy:hover i,
+            .butcenter .dt-buttons .excel:hover i,
+            .butcenter .dt-buttons .csv:hover i,
+            .butcenter .dt-buttons .pdf:hover i,
+            .butcenter .dt-buttons .print:hover i {
+                font-size: 32px;
+                transition: all 0.2s ease;
+            }
+
+    .butcenter .dt-buttons i {
+        font-size: 25px;
+        transition: all 0.2s ease;
+    }
+
+      
+    /*cardtopanelcss*/
+label {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.spanstar {
+    font-size: 15px;
+    color: red;
+    margin-left: 5px;
+}
+
+.form-control {
+    font-size: 14px;
+    border-radius: 4px;
+    /*box-shadow:1px 1px 1px 1px lightgreen;*/
+}
+
+.card-title {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #428bca;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    margin: 0px;
+}
+
+.form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    /*color: deeppink;*/
+    opacity: 0.6; /* Firefox */
+}
+
+h3 {
+    font-size: 24px;
+}
